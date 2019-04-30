@@ -1,0 +1,94 @@
+Pranit De, Reg No. 0000152, Roll No. 39/CSE/16161
+_________________________________________________________________________________________________________________________________________________________
+
+mysql> create table emprecord(
+    -> empno varchar(5),
+    -> empname varchar(10),
+    -> address varchar(20),
+    -> dob date,
+    -> doj date,
+    -> salary int(8)
+    -> , primary key(salary));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc emprecord;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| empno   | varchar(5)  | YES  |     | NULL    |       |
+| empname | varchar(10) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
+| dob     | date        | YES  |     | NULL    |       |
+| doj     | date        | YES  |     | NULL    |       |
+| salary  | int(8)      | NO   | PRI | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+
+mysql> select * from emprecord
+    -> ;
++-------+----------+--------------------+------------+------------+--------+
+| empno | empname  | address            | dob        | doj        | salary |
++-------+----------+--------------------+------------+------------+--------+
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 |
+| a-103 | Bobby    | P.P. Colony        | 1973-05-07 | 2002-05-07 |  12000 |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 |
+| c-101 | Bobby    | Behala Cal-34      | 1970-05-07 | 2002-05-07 |   5000 |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 |
+| a-104 | Bikas    | P.P Colony         | 1973-05-07 | 2002-05-07 |  11000 |
++-------+----------+--------------------+------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from emprecord where salary>12000;
++-------+----------+--------------------+------------+------------+--------+
+| empno | empname  | address            | dob        | doj        | salary |
++-------+----------+--------------------+------------+------------+--------+
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 |
++-------+----------+--------------------+------------+------------+--------+
+3 rows in set (0.00 sec)
+
+
+mysql> select * from emprecord where empname = 'Bobby';
++-------+---------+---------------+------------+------------+--------+
+| empno | empname | address       | dob        | doj        | salary |
++-------+---------+---------------+------------+------------+--------+
+| a-103 | Bobby   | P.P. Colony   | 1973-05-07 | 2002-05-07 |  12000 |
+| c-101 | Bobby   | Behala Cal-34 | 1970-05-07 | 2002-05-07 |   5000 |
++-------+---------+---------------+------------+------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> update emprecord set salary=15000 where empname = 'Bikas';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from emprecord;
++-------+----------+--------------------+------------+------------+--------+
+| empno | empname  | address            | dob        | doj        | salary |
++-------+----------+--------------------+------------+------------+--------+
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 |
+| a-103 | Bobby    | P.P. Colony        | 1973-05-07 | 2002-05-07 |  12000 |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 |
+| c-101 | Bobby    | Behala Cal-34      | 1970-05-07 | 2002-05-07 |   5000 |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 |
+| a-104 | Bikas    | P.P Colony         | 1973-05-07 | 2002-05-07 |  15000 |
+| a-109 | Sumanta  | P.P Colony         | 1973-05-07 | 2002-05-07 |  12000 |
++-------+----------+--------------------+------------+------------+--------+
+7 rows in set (0.00 sec)
+
+mysql> Delete from emprecord where empno='a-109';
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from emprecord;
++-------+----------+--------------------+------------+------------+--------+
+| empno | empname  | address            | dob        | doj        | salary |
++-------+----------+--------------------+------------+------------+--------+
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 |
+| a-103 | Bobby    | P.P. Colony        | 1973-05-07 | 2002-05-07 |  12000 |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 |
+| c-101 | Bobby    | Behala Cal-34      | 1970-05-07 | 2002-05-07 |   5000 |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 |
+| a-104 | Bikas    | P.P Colony         | 1973-05-07 | 2002-05-07 |  15000 |
++-------+----------+--------------------+------------+------------+--------+
+6 rows in set (0.00 sec)

@@ -1,0 +1,28 @@
+Assignment 12
+Pranit De, 39/CSE/16161
+_________________________________________________________________________________________________________________
+
+Q1. Connect SQL databse using python and solve Assignment 2.
+
+import pymysql
+
+db = pymysql.connect("localhost", "root", "", "pyconn")
+cursor = db.cursor()
+cursor.execute(
+    "create table emprecord(empno varchar(5) primary key,empname varchar(10),address varchar(20),dob date,doj date,salary int(8));")
+db.close()
+
+mysql> desc emprecord;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| empno   | varchar(5)  | NO   | PRI | NULL    |       |
+| empname | varchar(10) | YES  |     | NULL    |       |
+| address | varchar(20) | YES  |     | NULL    |       |
+| dob     | date        | YES  |     | NULL    |       |
+| doj     | date        | YES  |     | NULL    |       |
+| salary  | int(8)      | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+

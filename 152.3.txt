@@ -1,0 +1,306 @@
+Pranit De
+Reg No. 0000152
+Roll No. 39/CSE/16161
+Assignment 3
+___________________________________________________________________________________________________________________________________________________________________________
+
+
+Q1:Alter the table employee add a new column category (char (1 )).
+
+mysql> alter table emprecord add category char(1);
+Query OK, 6 rows affected (0.04 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from emprecord;
++-------+----------+--------------------+------------+------------+--------+----------+
+| empno | empname  | address            | dob        | doj        | salary | category |
++-------+----------+--------------------+------------+------------+--------+----------+
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 | NULL     |
+| a-103 | Bobby    | P.P. Colony        | 1973-05-07 | 2002-05-07 |  12000 | NULL     |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 | NULL     |
+| c-101 | Bobby    | Behala Cal-34      | 1970-05-07 | 2002-05-07 |   5000 | NULL     |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 | NULL     |
+| a-104 | Bikas    | P.P Colony         | 1973-05-07 | 2002-05-07 |  15000 | NULL     |
++-------+----------+--------------------+------------+------------+--------+----------+
+6 rows in set (0.00 sec)
+
+Q2:Alter the table employee increase the width of the column empno to 8.
+
+mysql> alter table emprecord modify column empno varchar(8);
+Query OK, 6 rows affected (0.03 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> desc emprecord;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| empno    | varchar(8)  | NO   | PRI | NULL    |       |
+| empname  | varchar(10) | YES  |     | NULL    |       |
+| address  | varchar(20) | YES  |     | NULL    |       |
+| dob      | date        | YES  |     | NULL    |       |
+| doj      | date        | YES  |     | NULL    |       |
+| salary   | int(8)      | NO   |     | NULL    |       |
+| category | char(1)     | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+7 rows in set (0.01 sec)
+
+Q3:Write SQL command to drop a column from a table.
+
+mysql> alter table emprecord drop column category;
+Query OK, 6 rows affected (0.04 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from emprecord;
++-------+----------+--------------------+------------+------------+--------+
+| empno | empname  | address            | dob        | doj        | salary |
++-------+----------+--------------------+------------+------------+--------+
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 |
+| a-103 | Bobby    | P.P. Colony        | 1973-05-07 | 2002-05-07 |  12000 |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 |
+| c-101 | Bobby    | Behala Cal-34      | 1970-05-07 | 2002-05-07 |   5000 |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 |
+| a-104 | Bikas    | P.P Colony         | 1973-05-07 | 2002-05-07 |  15000 |
++-------+----------+--------------------+------------+------------+--------+
+6 rows in set (0.00 sec)
+
+Q4:Write a SQL that will drop multiple columns from a table.
+
+ALTER TABLE table
+DROP COLUMN column_1,
+DROP COLUMN column_2,
+…;
+
+Q5: Create a read only view that will show empno, empname, address, salary
+
+mysql> create view View as select empno, empname, address, salary from emprecord;
+Query OK, 0 rows affected (0.01 sec)
+mysql> select * from View;
++-------+----------+--------------------+--------+
+| empno | empname  | address            | salary |
++-------+----------+--------------------+--------+
+| a-101 | Suman    | 20 Convent Road    |  20000 |
+| a-103 | Bobby    | P.P. Colony        |  12000 |
+| b-101 | Shekhar  | BidhanNagar Kol-66 |  14000 |
+| c-101 | Bobby    | Behala Cal-34      |   5000 |
+| a-105 | Sugoutam | New Market Cal-71  |  15000 |
+| a-104 | Bikas    | P.P Colony         |  15000 |
++-------+----------+--------------------+--------+
+6 rows in set (0.00 sec)
+
+Q6: Write a SQL Query to find the Average and Minimum and Sum of Salary Of the Emp
+
+mysql> select avg(salary),sum(salary),min(salary) from emprecord;
++-------------+-------------+-------------+
+| avg(salary) | sum(salary) | min(salary) |
++-------------+-------------+-------------+
+|  13500.0000 |       81000 |        5000 |
++-------------+-------------+-------------+
+1 row in set (0.01 sec)
+
+Q7:Write a SQL Query to find the Maximum Salary of the employees and it will display Column as
+Maximum Salary.
+
+mysql> select max(salary) as 'maximum salary' from emprecord;
++----------------+
+| maximum salary |
++----------------+
+|          20000 |
++----------------+
+1 row in set (0.00 sec)
+
+Q8: Write a SQL Query to find the Average Salary of the Employees.
+
+mysql> select avg(salary)
+    -> from employees;
++-------------+
+| avg(salary) |
++-------------+
+|  13500.0000 |
++-------------+
+1 row in set (0.00 sec)
+
+Q9: Write a SQL Query which will show all employees (the empno, empname, Address) whose Salary is
+greater than the average Salary of the employee.
+
+mysql> select empno,empname,address from emprecord where salary> 13500;
++-------+----------+--------------------+
+| empno | empname  | address            |
++-------+----------+--------------------+
+| a-101 | Suman    | 20 Convent Road    |
+| b-101 | Shekhar  | BidhanNagar Kol-66 |
+| a-105 | Sugoutam | New Market Cal-71  |
+| a-104 | Bikas    | P.P Colony         |
++-------+----------+--------------------+
+4 rows in set (0.00 sec)
+
+Q10: Write a SQL Query to count the number of employee whose salary is greater than Rs.10000.
+
+mysql> select count(*) from emprecord where salary> 10000;
++----------+
+| count(*) |
++----------+
+|        5 |
++----------+
+1 row in set (0.00 sec)
+
+Q11: Write a SQL Query to find the names of all employees whose name start with 's' And ends with 'n'.
+
+mysql> select * from emprecord where empname like 's%n';
++-------+---------+-----------------+------------+------------+--------+
+| empno | empname | address         | dob        | doj        | salary |
++-------+---------+-----------------+------------+------------+--------+
+| a-101 | Suman   | 20 Convent Road | 1976-02-03 | 2003-05-05 |  20000 |
++-------+---------+-----------------+------------+------------+--------+
+1 row in set (0.00 sec)
+
+Q13:Write a SQL Query to find the current time.
+
+mysql> select curdate();
++------------+
+| curdate()  |
++------------+
+| 2019-01-30 |
++------------+
+1 row in set (0.00 sec)
+mysql> select curtime();
++-----------+
+| curtime() |
++-----------+
+| 10:50:20  |
+
+
+Q14: Write a SQL Query to list all employees in ascending order of their salary.
+
+mysql> select * from emprecord order by salary ASC;
++-------+----------+--------------------+------------+------------+--------+
+| empno | empname  | address            | dob        | doj        | salary |
++-------+----------+--------------------+------------+------------+--------+
+| c-101 | Bobby    | Behala Cal-34      | 1970-05-07 | 2002-05-07 |   5000 |
+| a-103 | Bobby    | P.P. Colony        | 1973-05-07 | 2002-05-07 |  12000 |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 |
+| a-104 | Bikas    | P.P Colony         | 1973-05-07 | 2002-05-07 |  15000 |
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 |
++-------+----------+--------------------+------------+------------+--------+
+6 rows in set (0.00 sec)
++-----------+
+
+Q15:
+mysql> update emprecord set category = 'A' where salary > 20000;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update emprecord set category = 'B' where salary >= 10000 and salary < 20000;
+Query OK, 4 rows affected (0.00 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> update emprecord set category = 'C' where salary >= 7000 and salary < 10000;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update emprecord set category = 'TY' where  salary < 7000;
+ERROR 1406 (22001): Data too long for column 'category' at row 4
+mysql> update emprecord set category = 'T' where  salary < 7000;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from emprecord;
++-------+----------+--------------------+------------+------------+--------+----------+
+| empno | empname  | address            | dob        | doj        | salary | category |
++-------+----------+--------------------+------------+------------+--------+----------+
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 | NULL     |
+| a-103 | Bobby    | P.P. Colony        | 1973-05-07 | 2002-05-07 |  12000 | B        |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 | B        |
+| c-101 | Bobby    | Behala Cal-34      | 1970-05-07 | 2002-05-07 |   5000 | T        |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 | B        |
+| a-104 | Bikas    | P.P Colony         | 1973-05-07 | 2002-05-07 |  15000 | B        |
++-------+----------+--------------------+------------+------------+--------+----------+
+6 rows in set (0.00 sec)
+
+Q16:Write a SQL Query to find all employee names in whose name there are two Consecutive W.
+
+mysql> select empname from emprecord where empname like '%ww%';
+Empty set (0.00 sec)
+
+Q17: Write a SQL Query to find sum of salary of employee grouped by category with a minimum sum of
+30000.
+
+mysql> select category,sum(salary) from emprecord group by category having sum(salary)>30000;
++----------+-------------+
+| category | sum(salary) |
++----------+-------------+
+| B        |       56000 |
++----------+-------------+
+1 row in set (0.00 sec)
+
+Q18: Write a SQL Query to show the list of employee whose salary is between 7000 and 15000.
+
+mysql> select empname from emprecord where salary>=7000 and salary<=15000;
++----------+
+| empname  |
++----------+
+| Bobby    |
+| Shekhar  |
+| Sugoutam |
+| Bikas    |
++----------+
+
+Q19:Write a SQL Query to show the list of employee whose category is A or B or C.
+
+mysql> select empname,category from emprecord where category = 'A' or category = 'B' or category = 'C';
++----------+----------+
+| empname  | category |
++----------+----------+
+| Suman    | A        |
+| Bobby    | B        |
+| Shekhar  | B        |
+| Sugoutam | B        |
+| Bikas    | B        |
++----------+----------+
+5 rows in set (0.00 sec)
+
+Q20: Write a SQL Query to show the fields of employee separated by ,.
+
+mysql> use information_schema;
+Database changed
+mysql> select group_concat(column_name) from columns where table_schema = 'employee' and table_name = 'emprecord';
++-----------------------------------------------+
+| group_concat(column_name)                     |
++-----------------------------------------------+
+| empno,empname,address,dob,doj,salary,category |
++-----------------------------------------------+
+1 row in set (0.00 sec)
+
+Q21:
+mysql> select concat(empname,"was born on ",date_format( dob, '%D %b %Y')) from employees;
++--------------------------------------------------------------+
+| concat(empname,"was born on ",date_format( dob, '%D %b %Y')) |
++--------------------------------------------------------------+
+| sumanwas born on 3rd Feb 1976                                |
+| bobbywas born on 7th May 1973                                |
+| shekharwas born on 8th Sep 1971                              |
+| bobbywas born on 7th May 1970                                |
+| sugoutamwas born on 8th May 1968                             |
+| bikaswas born on 7th May 1973                                |
++--------------------------------------------------------------+
+
+Q22: Create a table empp with same attributes length as employee and copy the content of employee
+into empp.
+
+mysql> create table empp(empno varchar(5),empname varchar(10),address varchar(20), dob date, doj date, salary int(8), primary key(empno));
+Query OK, 0 rows affected (0.03 sec)mysql> insert into empp select * from emprecord;
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from empp;
++-------+----------+--------------------+------------+------------+--------+----------+
+| empno | empname  | address            | dob        | doj        | salary | category |
++-------+----------+--------------------+------------+------------+--------+----------+
+| a-101 | Suman    | 20 Convent Road    | 1976-02-03 | 2003-05-05 |  20000 | A        |
+| a-103 | Bobby    | P.P. Colony        | 1973-05-07 | 2002-05-07 |  12000 | B        |
+| b-101 | Shekhar  | BidhanNagar Kol-66 | 1971-09-08 | 2002-07-07 |  14000 | B        |
+| c-101 | Bobby    | Behala Cal-34      | 1970-05-07 | 2002-05-07 |   5000 | T        |
+| a-105 | Sugoutam | New Market Cal-71  | 1968-05-08 | 2002-07-03 |  15000 | B        |
+| a-104 | Bikas    | P.P Colony         | 1973-05-07 | 2002-05-07 |  15000 | B        |
++-------+----------+--------------------+------------+------------+--------+----------+
+6 rows in set (0.00 sec)

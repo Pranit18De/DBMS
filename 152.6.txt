@@ -1,0 +1,107 @@
+mysql> create table employees(empno int(8),ename varchar(40), job varchar(20), mgr int(6), hiredate date, sal int(8), comm int(6), deptno int(4));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc employees;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| empno    | int(8)      | NO   | PRI | NULL    |       |
+| ename    | varchar(40) | YES  |     | NULL    |       |
+| job      | varchar(20) | YES  |     | NULL    |       |
+| mgr      | int(6)      | YES  |     | NULL    |       |
+| hiredate | date        | YES  |     | NULL    |       |
+| sal      | int(8)      | YES  |     | NULL    |       |
+| comm     | int(6)      | YES  |     | NULL    |       |
+| deptno   | int(4)      | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> create table departments(deptno int(6) primary key,dname varchar(20), LOC varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+mysql> desc departments;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| deptno | int(6)      | NO   | PRI | NULL    |       |
+| dname  | varchar(20) | YES  |     | NULL    |       |
+| LOC    | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employees values(7369,"Smith", "Clerk", 7902,"1980-12-17",800,NULL,20);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employees;
++-------+-------+-----------+------+------------+------+------+--------+
+| empno | ename | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+-------+-----------+------+------------+------+------+--------+
+|  7369 | Smith | Clerk     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7499 | Allen | Salesman  | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7521 | Ward  | Salesman  | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | Jones | Manager   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7698 | Blake | Manager   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | Clark | Manager   | 7839 | 1981-06-09 | 2450 | NULL |     10 |
+|  7789 | Scott | Analyst   | 7566 | 1982-12-09 | 3000 | NULL |     20 |
+|  7839 | King  | President | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7876 | Adams | Clerk     | 7788 | 1983-01-12 | 1100 | NULL |     20 |
+|  7902 | Ford  | Analyst   | 7566 | 1981-12-04 | 3000 | NULL |     20 |
++-------+-------+-----------+------+------------+------+------+--------+
+10 rows in set (0.00 sec)
+mysql> insert into departments values(10, "Accounting","New York");
+Query OK, 1 row affected (0.00 sec)
+mysql> select * from departments;
++--------+------------+----------+
+| deptno | dname      | LOC      |
++--------+------------+----------+
+|     10 | Accounting | New York |
+|     20 | Research   | Dallas   |
+|     30 | Sales      | Chicago  |
+|     40 | Operations | Boston   |
++--------+------------+----------+
+4 rows in set (0.00 sec)
+mysql> select ename from employees where job = "analyst" or job = "salesman";
++-------+
+| ename |
++-------+
+| Allen |
+| Ward  |
+| Scott |
+| Ford  |
++-------+
+
+mysql> select * from employees where hiredate < "1981-09-30";
++-------+-------+----------+------+------------+------+------+--------+
+| empno | ename | job      | mgr  | hiredate   | sal  | comm | deptno |
++-------+-------+----------+------+------------+------+------+--------+
+|  7369 | Smith | Clerk    | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7499 | Allen | Salesman | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7521 | Ward  | Salesman | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | Jones | Manager  | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7698 | Blake | Manager  | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | Clark | Manager  | 7839 | 1981-06-09 | 2450 | NULL |     10 |
++-------+-------+----------+------+------------+------+------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select ename from employees where job != "managers";
++-------+
+| ename |
++-------+
+| Smith |
+| Allen |
+| Ward  |
+| Jones |
+| Blake |
+| Clark |
+| Scott |
+| King  |
+| Adams |
+| Ford  |
++-------+
+mysql> select ename from employees where empno = 7369 or empno = 7521 or empno = 7839 or empno = 7934 or empno = 7788;
++-------+
+| ename |
++-------+
+| Smith |
+| Ward  |
+| King  |
++-------+

@@ -1,0 +1,293 @@
+
+Pranit De, CSE/16161
+Reg No. 0000152
+Assignment-9
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Ans 1:
+
+SQL> declare
+  2  area number(12,2);
+  3  radius number(8,2);
+  4  begin
+  5  radius := &radius;
+  6  area := 3.14*radius*radius;
+  7  dbms_output.put_line(area);
+  8  end;
+  9  /
+
+Output:
+Enter value for radius: 2
+old   5: radius := &radius;
+new   5: radius := 1;
+12.56
+
+
+Ans 2:
+
+SQL> create table radius
+  2  ( radius number(8,2)
+  3  );
+
+Table created.
+
+SQL> create table area
+  2  ( radius number(8,2) ,
+  3  area number(12,2)
+  4  );
+
+SQL> insert all
+  2  into radius (radius) values (2)
+  3  into radius (radius) values (3)
+  4  into radius (radius) values (4)
+  5  select * from dual;
+
+SQL> declare
+  2      rad number(8,2);
+  3      ar number (12,2);
+  4      r number;
+  5  begin
+  6      r:= 1;
+  7      for rad in (select * from Radius)
+  8      loop
+  9          --select radius into rad from Radius;
+ 10          ar  := 3.14*rad.radius*rad.radius;
+ 11          insert into Area values(rad.radius, ar);
+ 12           r := r+1;
+ 13      end loop;
+ 14  end;
+ 15  /
+
+SQL> select * from area
+  2  ;
+
+    RADIUS       AREA
+---------- ----------
+         1       3.14
+         2      12.56
+         3      28.26
+         4      50.24
+
+
+Ans 3:
+
+SQL> declare
+  2  radius number(8,2);
+  3  area number (12,2);
+  4  pi constant number(4,2) := 3.14;
+  5  begin
+  6  radius := 2;
+  7  while radius <= 10
+  8  loop
+  9  area := pi * power(radius , 2);
+ 10  insert into area values(radius, area);
+ 11  radius := radius + 1;
+ 12  end loop;
+ 13  end;
+ 14  /
+
+SQL> select * from area;
+
+    RADIUS       AREA
+---------- ----------
+         1       3.14
+         2      12.56
+         3      28.26
+         4      50.24
+         2      12.56
+         3      28.26
+         4      50.24
+         5       78.5
+         6     113.04
+         7     153.86
+         8     200.96
+
+    RADIUS       AREA
+---------- ----------
+         9     254.34
+        10        314
+
+13 rows selected.
+
+Ans 4:
+
+SQL> declare
+  2  number integer;
+  3  sum_s integer;
+  4  temp integer;
+  5  begin
+  6  number := &number;
+  7  sum_s := 0;
+  8  while number <> 0
+  9  loop
+ 10  temp := MOD(number, 10);
+ 11  sum_s := sum_s + temp;
+ 12  number := trunc(number/10);
+ 13  end loop;
+ 14  dbms_output.Put_line('sum of digits = ' || sum_s);
+ 15  end;
+ 16  /
+
+output
+Enter value for number: 12345
+old   6: number := &number;
+new   6: number := 12345;
+sum of digits = 15
+
+PL/SQL procedure successfully completed.
+
+Ans 5:
+
+SQL> declare
+  2  n integer;
+  3  begin
+  4  n := 1;
+  5  while n<= 10
+  6  loop
+  7  dbms_output.Put_line(n);
+  8  n := n + 1;
+  9  end loop;
+ 10  end;
+ 11  /
+
+output
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+
+PL/SQL procedure successfully completed.
+
+Ans 6:
+
+SQL> declare
+  2  first number := 0;
+  3  second number := 1;
+  4  temp number;
+  5  n number := 7;
+  6  i number;
+  7  begin
+  8  dbms_output.put_line(first);
+  9  dbms_output.put_line(second);
+ 10  for i in 2..n
+ 11      loop
+ 12          temp:=first+second;
+ 13
+ 14  first := second;
+ 15  second := temp;
+ 16  dbms_output.put_line(temp);
+ 17  end loop;
+ 18  end;
+ 19  /
+
+output
+0
+1
+1
+2
+3
+5
+8
+13
+
+PL/SQL procedure successfully completed.
+
+Ans 7:
+SQL> declare
+  2  str varchar(20);
+  3  len integer;
+  4  str_rev varchar(20);
+  5  begin
+  6  str := '&str';
+  7  len := length(str);
+  8  for i in reverse 1.. len
+  9  loop
+ 10  str_rev := str_rev || substr(str, i, 1);
+ 11  end loop;
+ 12  dbms_output.put_line(str_rev);
+ 13  end;
+ 14  /
+
+output
+Enter value for str: nikhil
+old   6: str := '&str';
+new   6: str := 'nikhil';
+lihkin
+
+PL/SQL procedure successfully completed.
+
+Ans 8:
+
+SQL> create table employee
+  2  ( empno varchar(5), salary integer);
+
+Table created.
+
+SQL> insert all
+  2  into employee values ('a-101', 3000)
+  3  into employee values ('b-201', 7000)
+  4  into employee values ('c-103', 13000)
+  5  select * from dual;
+
+SQL> create table taxes
+  2  ( empno varchar(5), tax number);
+
+SQL> declare
+  2  sal integer;
+  3  tax number;
+  4  begin
+  5  for sal in (select * from employee)
+  6  loop
+  7  if (sal.salary <= 4000) then
+  8  tax := 0;
+  9  elsif (sal.salary > 4000 and sal.salary <=8000) then
+ 10  tax := sal.salary * 0.1;
+ 11  elsif (sal.salary > 8000 and sal.salary <=12000) then
+ 12  tax := 0.2 * sal.salary;
+ 13  else
+ 14  tax := 0.3 * sal.salary;
+ 15  end if;
+ 16  insert into taxes values (sal.empno, tax);
+ 17  end loop;
+ 18  end;
+ 19  /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from taxes
+  2  ;
+
+EMPNO        TAX
+----- ----------
+a-101          0
+b-201        700
+c-103       3900
+
+Ans 9:
+
+SQL> create or replace procedure find_salary(empno in varchar)
+  2  is
+  3  begin
+  4  for sal in (select * from employee)
+  5  loop
+  6  if sal.empno = empno then
+  7  dbms_output.put_line(sal.salary);
+  8  end if;
+  9  end loop;
+ 10  end;
+ 11  /
+
+Procedure created.
+
+SQL> exec find_salary('a-101');
+3000
+
+PL/SQL procedure successfully completed.

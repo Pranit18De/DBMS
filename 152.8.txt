@@ -1,0 +1,302 @@
+Pranit De
+0000152
+39/CSE/16161
+______________________________________________________________________________________________________________________________________________________________________
+
+create table Emp
+(   emp_ssn number(10) NOT NULL,
+    empname varchar2(20) NOT NULL,
+    hire_date date NOT NULL,
+    mgr varchar2(20) NOT NULL,
+    job varchar2(20) NOT NULL,
+    salary number(10) NOT NULL,
+    comm varchar2(20) NOT NULL,
+    deptno number(10) NOT NULL,
+    CONSTRAINT Emp_pk PRIMARY KEY (emp_ssn)
+);
+
+create table Dept
+(
+    deptno number(10) NOT NULL,
+    deptname varchar(20) NOT NULL,
+    locno number(10) NOT NULL,
+    mgr varchar2(20) NOT NULL,
+    CONSTRAINT Dept_pk PRIMARY KEY (deptno)
+);
+
+create table Equipment
+(
+    equip_no number(10) NOT NULL,
+    qty number(10) NOT NULL,
+    CONSTRAINT Equipment_pk PRIMARY KEY (equip_no)
+);
+
+insert into Emp values (2546, 'Jason Momua', '08-MAR-2002', 'Jacob Fernandes', 'Assistant Manager', 50000, 'A', 101);
+
+insert into Emp values (2547, 'Satyendra', '08-DEC-2002', 'Kay Johnson', 'CEO', 70000, 'A', 102);
+
+insert into Emp values (2548, 'Joseph', '12-MAR-2002', 'Jacob Fernandes', 'Engineer', 25000, 'A', 103);
+
+insert into Emp values (2549, 'Aman', '15-MAR-2002', 'Jacob Fernandes', 'Assistant Engineer', 15000, 'A', 103);
+
+insert into Emp values (2550, 'Carl', '20-MAR-2002', 'Jacob Fernandes', 'Assistant Engineer', 15000, 'A', 103);
+
+insert into Emp values (2649, 'Sophie', '25-MAR-2002', 'Jacob Fernandes', 'Assistant Engineer', 15000, 'A', 104);
+
+insert into Emp values (2849, 'Turner', '15-MAR-2004', 'Joseph', 'Assistant Engineer', 15000, 'B', 104);
+
+insert into Emp values (2542, 'Eric', '15-JUN-2002', 'Satyendra', 'Support', 25000, 'A', 105);
+
+insert into Emp values (2659, 'Kenny', '15-MAR-2002', 'Jacob Fernandes', 'Assistant Engineer', 15000, 'A', 105);
+
+insert into Emp values (3549, 'Arya', '15-DEC-2002', 'Jason Momua', 'Assistant Manager', 35000, 'A', 105);
+
+insert into Emp values (1996, 'Jacob Fernandes', '15-DEC-2002', 'Satyendra', 'CTO', 60000, 'A', 102);
+
+insert into Dept values (101, 'Support', 1011, 'John Doe');
+
+insert into Dept values (102, 'Machinery', 1012, 'Satyendra');
+
+insert into Dept values (103, 'Customer Care', 1013, 'Joseph');
+
+insert into Dept values (104, 'Production', 1014, 'Jacob Fernandes');
+
+insert into Dept values (105, 'Client Relations', 1015, 'Arya');
+
+insert into Equipment values (101, 4);
+
+insert into Equipment values (102, 5);
+
+insert into Equipment values (103, 1);
+
+insert into Equipment values (104, 6);
+
+insert into Equipment values (105, 4);
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Ans 1. 
+declare
+	empssn number;
+	raisepercent number;
+	raisedsalary number;
+function increaseSalary(x in number, y in number)
+return number
+is
+	incr_salary number;
+	curr_salary number;
+begin
+	select salary into curr_salary from Emp where emp_ssn=x;
+	incr_salary:=curr_salary + ((curr_salary * y)/100);
+	return incr_salary;
+end;
+begin
+	empssn:=2546;
+	raisepercent:=20;
+	raisedsalary:=increaseSalary(empssn, raisepercent);
+	dbms_output.put_line(' Salary after increment: ' || raisedsalary);
+end;
+/
+
+Output:
+Statement processed.
+Salary after increment: 60000
+
+Ans 2.
+declare
+	equipment_no number;
+	quantity number;
+procedure Get_On_Hand(e_no in number, quantity out number) is
+begin
+	select qty into quantity from Equipment where equip_no=e_no;
+end;
+begin
+	equipment_no:=104;
+	Get_ON_Hand(equipment_no, quantity);
+	dbms_output.put_line(' Current In-Hand Quantity is: ' || quantity); 
+end;
+/
+
+Output:
+Statement processed.
+Current In-Hand Quantity is: 6
+
+Ans 3.
+declare
+	emp_ssn number;
+	dept varchar2(20);
+procedure emp_dept(emp_no in number, dept out varchar2) is
+	deptnumber number;
+begin
+	select deptno into deptnumber from Emp where emp_ssn=emp_no;
+	select deptname into dept from Dept where deptno=deptnumber;
+end;
+begin
+	emp_ssn:=2546;
+	emp_dept(emp_ssn, dept);
+	dbms_output.put_line(' The deptname is: ' || dept); 
+end;
+/
+
+Output:
+Statement processed.
+The deptname is: Support
+
+Ans 4.
+create or replace package body emp_package as
+	procedure find_emp_details(emp_no in Emp.emp_ssn%type, emp_name out Emp.empname%type, dept_no out Emp.deptno%type) is
+	begin
+		select empname, deptno into emp_name, dept_no from Emp where emp_ssn=emp_no;
+	end find_emp_details;
+
+	function increaseSalary(emp_no in Emp.emp_ssn%type, percent_incr in number)
+	return number
+	is
+		incr_salary number;
+		curr_salary number;
+	begin
+		select salary into curr_salary from Emp where emp_ssn=emp_no;
+		incr_salary:=curr_salary + ((curr_salary * percent_incr)/100);
+		return incr_salary;
+	end increaseSalary;
+end emp_package;
+declare
+	emp_ssn number;
+	empname varchar2(20);
+	deptno number;
+	percent_incr number;
+	final_salary number;
+begin
+	emp_ssn:=2546;
+	emp_package.find_emp_details(emp_ssn, empname, deptno);
+	dbms_output.put_line(' The name of the Employee: ' || empname);
+	dbms_output.put_line(' The deptno of the Employee: ' || deptno);
+	percent_incr:=20;
+	final_salary := emp_package.increaseSalary(emp_ssn, percent_incr);
+	dbms_output.put_line(' Final Salary after increment is: ' || final_salary);
+end;
+/
+
+Output:
+Package body created.
+
+Statement processed.
+The name of the Employee: Jason Momua
+The deptno of the Employee: 101
+Final Salary after increment is: 60000
+
+Ans 5.
+declare
+	emp_ssn number;
+	mgr_ssn number;
+procedure find_mgr_ssn(emp_no in number, mgr_no out number) is
+	manager varchar2(20);
+	ctr number;
+begin
+    select count(*) into ctr from Emp where emp_ssn=emp_no;
+    if ctr != 0 then
+	    select mgr into manager from Emp where emp_ssn=emp_no;
+	    select emp_ssn into mgr_no from Emp where empname=manager;
+	else
+	    mgr_no:=-1;
+    end if;
+end;
+begin
+	emp_ssn:=2546;
+	find_mgr_ssn(emp_ssn, mgr_ssn);
+	dbms_output.put_line(' SSN of Manager: ' || mgr_ssn); 
+end;
+/
+
+Output:
+Statement processed.
+SSN of Manager: 1996
+
+Ans 6.
+declare
+	empssn number;
+	curr_salary number;
+function findClass(x in number)
+return number
+is
+	curr_salary number;
+begin
+	select salary into curr_salary from Emp where emp_ssn=x;
+	if curr_salary <= 30000 then
+		dbms_output.put_line(' Class A ');
+	elsif curr_salary > 30000 and curr_salary<=60000 then
+		dbms_output.put_line(' Class B ');
+	else
+		dbms_output.put_line(' Class C ');
+	end if;
+	return curr_salary;
+end;
+begin
+	empssn:=2546;
+	curr_salary:=findClass(empssn);
+end;
+/
+
+Output:
+Statement processed.
+Class B 
+
+Ans 7.
+declare
+	deptno number;
+	eqp_qty number;
+	eqp_value number;
+	res number;
+function find_total_value(dept_no in Emp.deptno%type, eqp_qty_on_hand in number, eqp_value in number)
+return number
+is
+	total_value number;
+	ans number;
+begin
+	total_value:=eqp_qty_on_hand*eqp_value;
+	if total_value>5000 then
+		ans:=-1;
+	else
+		ans:=0;
+	end if;
+	return ans;
+end;
+begin
+	deptno:=102;
+	eqp_qty:=3;
+	eqp_value:=1000;
+	res := find_total_value(deptno, eqp_qty, eqp_value);
+	dbms_output.put_line(' Output: ' || res);
+end;
+/
+
+Output:
+Statement processed.
+Output: 0
+
+Ans 9.
+declare
+	emp_ssn number;
+	mgr_hire_date date;
+procedure find_mgr_ssn(emp_no in number, mgr_hire_date out date) is
+	manager varchar2(20);
+	ctr number;
+begin
+    select count(*) into ctr from Emp where emp_ssn=emp_no;
+    if ctr != 0 then
+	    select mgr into manager from Emp where emp_ssn=emp_no;
+	    select hire_date into mgr_hire_date from Emp where empname=manager;
+	else
+	    mgr_hire_date:='30-FEB-3000';
+    end if;
+end;
+begin
+	emp_ssn:=2546;
+	find_mgr_ssn(emp_ssn, mgr_hire_date);
+	dbms_output.put_line(' Hire Date of Manager: ' || mgr_hire_date); 
+end;
+/
+
+Output:
+Statement processed.
+Hire Date of Manager: 15-DEC-02

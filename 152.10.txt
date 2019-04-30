@@ -1,0 +1,287 @@
+Name -  Pranit De
+Roll No. - 39/CSE/16161
+__________________________________________________________________________________________________________________________
+
+mysql> create table Emp
+    -> (   empno int PRIMARY KEY,
+    ->     first_name varchar(20),
+    ->     last_name varchar(20),
+    ->     hire_date date,
+    ->     mgr int,
+    ->     job varchar(20),
+    ->     salary int,
+    ->     comm int,
+    ->     deptno int
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table Dept
+    -> (
+    ->     deptno int  PRIMARY KEY,
+    ->     deptname varchar(20),
+    ->     locno int
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table Location
+    -> (
+    ->     locno int  PRIMARY KEY,
+    ->     city varchar(20)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table Salgrade
+    -> (
+    ->     grade varchar(5) PRIMARY KEY,
+    ->     lowsal int,
+    ->     hisal int 
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+//Results after inserting valuess
+mysql> select * from Emp;
++-------+------------+-----------+------------+------+--------------------+--------+-------+--------+
+| empno | first_name | last_name | hire_date  | mgr  | job                | salary | comm  | deptno |
++-------+------------+-----------+------------+------+--------------------+--------+-------+--------+
+|  2546 | John       | Doe       | 2002-08-03 | 1000 | Assistant Manager  |  50000 | 10000 |    101 |
+|  2547 | Satyendra  | Dubey     | 2002-08-04 | 1000 | CEO                |  70000 |  5000 |    102 |
+|  2548 | Joseph     | Turing    | 2002-12-12 | 1000 | Engineer           |  25000 |  5000 |    103 |
+|  2549 | Aman       | Singh     | 2002-11-09 | 1000 | Cheif Engineer 	  |  15000 |     0 |    103 |
+|  2550 | Carl       | Marx      | 2002-07-07 | 1500 | Assistant Engineer |  15000 |     0 |    103 |
+|  2649 | Sophie     | Turner    | 2002-08-06 | 1500 | Assistant Engineer |  15000 |  1500 |    104 |
+|  2849 | Turner     | Steele    | 2004-05-05 | 1500 | Assistant Engineer |  15000 |  2000 |    104 |
+|  2542 | Eric       | Turner    | 2002-02-02 | 1500 | Support Staff      |  25000 |     0 |    105 |
+|  2659 | Kenny      | Seb       | 2002-02-06 | 1500 | Assistant Engineer |  15000 |  5000 |    105 |
+|  1500 | Arya       | Stark     | 2002-09-09 | 1000 | Assistant Manager  |  35000 |     0 |    105 |
+|  1000 | Jacob      | Fernandes | 2002-06-12 |    0 | CTO                |  60000 | 12000 |    102 |
++-------+------------+-----------+------------+------+--------------------+--------+-------+--------+
+11 rows in set (0.00 sec)
+
+mysql> select * from Dept;
++--------+------------------+-------+
+| deptno | deptname         | locno |
++--------+------------------+-------+
+|    101 | Support          |  1011 |
+|    102 | Machinery        |  1012 |
+|    103 | Customer Care    |  1013 |
+|    104 | Production       |  1014 |
+|    105 | Client Relations |  1015 |
++--------+------------------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Location;
++-------+-----------+
+| locno | city      |
++-------+-----------+
+|  1011 | Toronto   |
+|  1012 | New York  |
+|  1013 | Mumbai    |
+|  1014 | New Delhi |
+|  1015 | London    |
++-------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Salgrade
+    -> ;
++-------+--------+--------+
+| grade | lowsal | hisal  |
++-------+--------+--------+
+| A     |  50000 | 100000 |
+| B     |  30000 |  50000 |
+| C     |  20000 |  30000 |
+| D     |  10000 |  20000 |
++-------+--------+--------+
+4 rows in set (0.00 sec)
+
+-----------------------------------------------------------------------
+
+Q1. 
+
+mysql> select n.last_name, n.deptno, s.deptname from Emp n join Dept s on n.deptno=s.deptno;
++-----------+--------+------------------+
+| last_name | deptno | deptname         |
++-----------+--------+------------------+
+| Doe       |    101 | Support          |
+| Dubey     |    102 | Machinery        |
+| Turing    |    103 | Customer Care    |
+| Singh     |    103 | Customer Care    |
+| Marx      |    103 | Customer Care    |
+| Turner    |    104 | Production       |
+| Steele    |    104 | Production       |
+| Turner    |    105 | Client Relations |
+| Seb       |    105 | Client Relations |
+| Stark     |    105 | Client Relations |
+| Fernandes |    102 | Machinery        |
++-----------+--------+------------------+
+11 rows in set (0.00 sec)
+
+Q2.
+
+mysql> select n.job, p.city from Emp n join Dept s on n.deptno=s.deptno join Location p on s.locno=p.locno;
++--------------------+-----------+
+| job                | city      |
++--------------------+-----------+
+| Assistant Manager  | Toronto   |
+| CEO                | New York  |
+| CTO                | New York  |
+| Engineer           | Mumbai    |
+| Assistant Engineer | Mumbai    |
+| Assistant Engineer | Mumbai    |
+| Assistant Engineer | New Delhi |
+| Assistant Engineer | New Delhi |
+| Support            | London    |
+| Assistant Engineer | London    |
+| Assistant Manager  | London    |
++--------------------+-----------+
+11 rows in set (0.00 sec)
+
+Q3.
+
+mysql> select n.last_name, s.deptname, s.locno, l.city from Emp n join Dept s on n.deptno=s.deptno join Location l on s.locno=l.locno where n.comm != 0;
++-----------+------------------+-------+-----------+
+| last_name | deptname         | locno | city      |
++-----------+------------------+-------+-----------+
+| Doe       | Support          |  1011 | Toronto   |
+| Dubey     | Machinery        |  1012 | New York  |
+| Turing    | Customer Care    |  1013 | Mumbai    |
+| Turner    | Production       |  1014 | New Delhi |
+| Steele    | Production       |  1014 | New Delhi |
+| Seb       | Client Relations |  1015 | London    |
+| Fernandes | Machinery        |  1012 | New York  |
++-----------+------------------+-------+-----------+
+7 rows in set (0.00 sec)
+
+Q4. 
+
+mysql> select n.last_name, s.deptname from Emp n join Dept s on n.deptno=s.deptno where n.last_name like "%a%";
++-----------+------------------+
+| last_name | deptname         |
++-----------+------------------+
+| Marx      | Customer Care    |
+| Stark     | Client Relations |
+| Fernandes | Machinery        |
++-----------+------------------+
+3 rows in set (0.00 sec)
+
+Q5.
+
+mysql> select n.last_name, n.job, n.deptno, s.deptname from Emp n join Dept s on n.deptno=s.deptno join Location l on s.locno=l.locno where l.city="Toronto";
++-----------+-------------------+--------+----------+
+| last_name | job               | deptno | deptname |
++-----------+-------------------+--------+----------+
+| Doe       | Assistant Manager |    101 | Support  |
++-----------+-------------------+--------+----------+
+1 row in set (0.00 sec)
+
+Q6.
+
+>>>>>>>>mysql> select n.last_name "Employee", n.empno "Emp#", n.mgr "Mgr#", s.last_name "Manager" from Emp n join Emp s where n.mgr=s.empno;
++----------+------+------+-----------+
+| Employee | Emp# | Mgr# | Manager   |
++----------+------+------+-----------+
+| Doe      | 2546 | 1000 | Fernandes |
+| Dubey    | 2547 | 1000 | Fernandes |
+| Turing   | 2548 | 1000 | Fernandes |
+| Singh    | 2549 | 1000 | Fernandes |
+| Marx     | 2550 | 1500 | Stark     |
+| Turner   | 2649 | 1500 | Stark     |
+| Steele   | 2849 | 1500 | Stark     |
+| Turner   | 2542 | 1500 | Stark     |
+| Seb      | 2659 | 1500 | Stark     |
+| Stark    | 1500 | 1000 | Fernandes |
++----------+------+------+-----------+
+10 rows in set (0.02 sec)
+
+Q7.
+
+mysql> select n.last_name "Employee", n.empno "Emp#", n.mgr "Mgr#", m.last_name "Manager" from Emp n left outer join Emp m on n.mgr=m.empno;
++-----------+------+------+-----------+
+| Employee  | Emp# | Mgr# | Manager   |
++-----------+------+------+-----------+
+| Doe       | 2546 | 1000 | Fernandes |
+| Dubey     | 2547 | 1000 | Fernandes |
+| Turing    | 2548 | 1000 | Fernandes |
+| Singh     | 2549 | 1000 | Fernandes |
+| Marx      | 2550 | 1500 | Stark     |
+| Turner    | 2649 | 1500 | Stark     |
+| Steele    | 2849 | 1500 | Stark     |
+| Turner    | 2542 | 1500 | Stark     |
+| Seb       | 2659 | 1500 | Stark     |
+| Stark     | 1500 | 1000 | Fernandes |
+| Fernandes | 1000 |    0 | NULL      |
++-----------+------+------+-----------+
+11 rows in set (0.01 sec)
+
+Q8.
+
+mysql> select e.deptno "Department", e.first_name "Employee", c.first_name "Colleague" from Emp e join Emp c on e.deptno=c.deptno where e.first_name != c.first_name order by e.deptno;
++------------+-----------+-----------+
+| Department | Employee  | Colleague |
++------------+-----------+-----------+
+|        102 | Satyendra | Jacob     |
+|        102 | Jacob     | Satyendra |
+|        103 | Carl      | Aman      |
+|        103 | Joseph    | Carl      |
+|        103 | Aman      | Carl      |
+|        103 | Aman      | Joseph    |
+|        103 | Carl      | Joseph    |
+|        103 | Joseph    | Aman      |
+|        104 | Turner    | Sophie    |
+|        104 | Sophie    | Turner    |
+|        105 | Kenny     | Arya      |
+|        105 | Kenny     | Eric      |
+|        105 | Arya      | Eric      |
+|        105 | Eric      | Kenny     |
+|        105 | Arya      | Kenny     |
+|        105 | Eric      | Arya      |
++------------+-----------+-----------+
+16 rows in set (0.00 sec)
+
+Q9.
+
+mysql> select n.last_name, n.job, d.deptname, n.salary, s.grade from Emp n join Dept d on n.deptno=d.deptno join Salgrade s on n.salary between s.lowsal and s.hisal;
++-----------+--------------------+------------------+--------+-------+
+| last_name | job                | deptname         | salary | grade |
++-----------+--------------------+------------------+--------+-------+
+| Doe       | Assistant Manager  | Support          |  50000 | A     |
+| Doe       | Assistant Manager  | Support          |  50000 | B     |
+| Dubey     | CEO                | Machinery        |  70000 | A     |
+| Turing    | Engineer           | Customer Care    |  25000 | C     |
+| Singh     | Assistant Engineer | Customer Care    |  15000 | D     |
+| Marx      | Assistant Engineer | Customer Care    |  15000 | D     |
+| Turner    | Assistant Engineer | Production       |  15000 | D     |
+| Steele    | Assistant Engineer | Production       |  15000 | D     |
+| Turner    | Support            | Client Relations |  25000 | C     |
+| Seb       | Assistant Engineer | Client Relations |  15000 | D     |
+| Stark     | Assistant Manager  | Client Relations |  35000 | B     |
+| Fernandes | CTO                | Machinery        |  60000 | A     |
++-----------+--------------------+------------------+--------+-------+
+12 rows in set (0.00 sec)
+
+Q10.
+
+mysql> select e.last_name, e.hire_date from Emp e join Emp p where p.last_name="Doe" and p.hire_date < e.hire_date;
++-----------+------------+
+| last_name | hire_date  |
++-----------+------------+
+| Dubey     | 2002-08-04 |
+| Turing    | 2002-12-12 |
+| Singh     | 2002-11-09 |
+| Turner    | 2002-08-06 |
+| Steele    | 2004-05-05 |
+| Stark     | 2002-09-09 |
++-----------+------------+
+6 rows in set (0.01 sec)
+
+Q11.
+
+>>>>>>>>mysql> select e.last_name "Employee", e.hire_date "Emp Hired", m.last_name "Manager", m.hire_date "Mgr Hired" from Emp e join Emp m on e.mgr=m.empno where e.hire_date < m.hire_date;
++----------+------------+---------+------------+
+| Employee | Emp Hired  | Manager | Mgr Hired  |
++----------+------------+---------+------------+
+| Marx     | 2002-07-07 | Stark   | 2002-09-09 |
+| Turner   | 2002-08-06 | Stark   | 2002-09-09 |
+| Turner   | 2002-02-02 | Stark   | 2002-09-09 |
+| Seb      | 2002-02-06 | Stark   | 2002-09-09 |
++----------+------------+---------+------------+
+4 rows in set (0.00 sec)

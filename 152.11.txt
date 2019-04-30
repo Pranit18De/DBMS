@@ -1,0 +1,90 @@
+Assignment 11
+Name - Pranit De
+Roll No.- 39/CSE/16161
+_________________________________________________________________________________________________________________________
+Q1. Find sum of two numbers in php
+
+<?php
+echo 'Hello World';
+echo "<br>";
+$x = 20;
+$y = 10;
+$sum = $x + $y;
+echo "Sum: ", $sum;
+?>
+
+
+
+Q2. Create tables student and books and insert values into them using php.
+
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "phpconn";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "INSERT INTO students
+VALUES ('Vikas',15,'CSE','Kotra, Bhopal','Concepts of DBMS', 'Fault in our stars', 'Computer Networks')";
+
+if ($conn->query($sql) === TRUE) {
+    echo "New record created successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+
+$conn->close();
+?>
+
+OUTPUT:
++--------+------+-------+---------------------+------------------+--------------------+-------------------+
+| name   | roll | class | Address             | book1            | book2              | book3             |
++--------+------+-------+---------------------+------------------+--------------------+-------------------+
+| Varun  |   12 | CSE   | Palam, New Delhi    | Concepts of DBMS | RamCharitManas     | Scion of Ishkavu  |
+| Vikas  |   15 | CSE   | Kotra, Bhopal       | Concepts of DBMS | Fault in our stars | Computer Networks |
+| Rahul  |   10 | CSE   | Neelam Road, Munger | abc              | xyz                | qwe               |
+| Shivam |   11 | CSE   | Neelam Road, Munger | Concept of abc   | xyz                | qwe               |
++--------+------+-------+---------------------+------------------+--------------------+-------------------+
+4 rows in set (0.03 sec)
+
+
+Q3. Find the name of student and all the books issued by them if author name of one of the book is Henry Korth.
+
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "phpconn";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "Select students.name, students.book1,students.book2,students.book3 from students, books where (books.author= 'Henry Korth' and students.book1 =books.book_name) or (books.author= 'Henry Korth' and students.book2 =books.book_name) or (books.author= 'Henry Korth' and students.book3 =books.book_name) ";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "name: " . $row["name"]. " - book1: " . $row["book1"]. " - book2" . $row["book2"]." -book3".$row["book3"]. "<br>";;
+    }
+} else {
+    echo "0 results";
+}
+$conn->close();
+
+?>
+
+OUTPUT in the Browsers:
+name: Varun - book1: Concepts of DBMS - book2RamCharitManas -book3Scion of Ishkavu
+name: Vikas - book1: Concepts of DBMS - book2Fault in our stars -book3Computer Networks
